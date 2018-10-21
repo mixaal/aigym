@@ -7,7 +7,7 @@ from gym import envs
 #for e in sorted(envs.registry.env_specs.keys()):
 #    print e
 
-agent = MarkovDecision()
+agent = MarkovDecision('riverraid.model')
 #agent = RandomAgent()
 
 game = Gameplay('Riverraid-v0', agent)

@@ -15,7 +15,7 @@ class RandomAgent(object):
 
 
 class MarkovDecision(object):
-    def __init__(self):
+    def __init__(self,  model_name):
         self.total_episodes = 2000
         self.learning_rate = 0.8
         self.max_steps = 2000
@@ -27,6 +27,9 @@ class MarkovDecision(object):
         self.decay_rate = 0.005  # exponential decay rate for exploration probability
         self.initialized = False
         self.game_state = 0
+        self.model_name = model_name
+        if model_name is not None:
+            self._Q = np.load(model_name)
 
     def initialize(self, env):
         n_actions = env.action_space.n
@@ -41,6 +44,8 @@ class MarkovDecision(object):
         self.initialized = True
 
     def learn_how_to_play(self, env):
+        if self.model_name is not None:
+            return
         self.initialize(env)
         rewards = []
 
