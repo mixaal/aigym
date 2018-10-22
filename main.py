@@ -1,5 +1,5 @@
 from gameplay import Gameplay
-from agents import RandomAgent, MarkovDecision
+from agents import RandomAgent, MarkovDecisionModelAgent, FilipkuvAgent
 import atari_py as ap
 from gym import envs
 
@@ -7,8 +7,9 @@ from gym import envs
 #for e in sorted(envs.registry.env_specs.keys()):
 #    print e
 
-agent = MarkovDecision('riverraid.model')
+#agent = MarkovDecisionModelAgent('riverraid.model')
 #agent = RandomAgent()
+agent = FilipkuvAgent()
 
 game = Gameplay('Riverraid-v0', agent)
 game.play()

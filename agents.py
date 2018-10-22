@@ -3,6 +3,35 @@ import random
 import time
 
 
+class FilipkuvAgent(object):
+    def __init__(self):
+        self.strileni_doprava = 16
+        self.strileni_doleva = 17
+        self.strileni_dopredu = 1
+        self.nestrilet_dopredu = 2
+        self.rychle_strilet_dopredu = 10
+        self.doprava_nestrilet = 3
+        self.doleva_nestrilet = 4
+        self.stav = 0
+
+
+    def learn_how_to_play(self, env):
+        print env.action_space.n
+        #pass
+
+
+    def get_state(self, env):
+        print self.stav
+        self.stav += 1
+        if self.stav >= 330 and self.stav <= 335:
+            return self.strileni_doleva
+        elif self.stav >= 470 and self.stav <= 480:
+            return self.strileni_doprava
+        elif self.stav < 1000:
+            return self.strileni_dopredu
+        else:
+            return self.nestrilet_dopredu
+
 class RandomAgent(object):
     def __init__(self):
         pass
@@ -14,7 +43,7 @@ class RandomAgent(object):
         return env.action_space.sample()
 
 
-class MarkovDecision(object):
+class MarkovDecisionModelAgent(object):
     def __init__(self,  model_name):
         self.total_episodes = 2000
         self.learning_rate = 0.8
