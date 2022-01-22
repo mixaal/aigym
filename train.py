@@ -9,6 +9,9 @@ class GamePlay(object):
         self.agent.set_env(self.env)
         self.score = 0
 
+    def load(self, replay):
+        self.agent.load(replay)
+
     def train(self):
         self.agent.train()
 

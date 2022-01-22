@@ -30,10 +30,13 @@ class PPOAgent(object):
     def set_env(self, env):
         self.env = env
 
+    def load(self, replay):
+        pass
+
     def train(self):
         #self.player = PPO("CnnPolicy", self.env, learning_rate=0.00007, gamma=0.95, gae_lambda=0.9, create_eval_env=True, tensorboard_log='logs',verbose=1)
-        self.player = PPO("CnnLstmPolicy", self.env, batch_size=32, n_steps=4096, learning_rate=0.0001, tensorboard_log='logs',verbose=1)
-        self.player.learn(total_timesteps=500000, callback=TrainAndLoggingCallback(check_freq=10000, save_path='models/'))
+        self.player = PPO("CnnPolicy", self.env, batch_size=64, n_steps=4096, learning_rate=0.0001, tensorboard_log='logs',verbose=1)
+        self.player.learn(total_timesteps=4500000, callback=TrainAndLoggingCallback(check_freq=10000, save_path='models/'))
 
     def get_state(self, state):
         action, _ = self.player.predict(state)
