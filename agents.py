@@ -1,7 +1,43 @@
 import numpy as np
 import random
 import time
+import os
+from stable_baselines3 import PPO
+from stable_baselines3.common.callbacks import BaseCallback
 
+
+class TrainAndLoggingCallback(BaseCallback):
+    def __init__(self, check_freq=10000, save_path='models'):
+        super(TrainAndLoggingCallback, self).__init__(1)
+        self.check_freq = check_freq
+        self.save_path = save_path
+
+    def _init_callback(self):
+        os.makedirs(self.save_path, exist_ok=True)
+
+    def _on_step(self):
+        if self.n_calls % self.check_freq == 0:
+            model_path = os.path.join(self.save_path, "model_{}".format(self.n_calls))
+            self.model.save(model_path)
+
+
+
+class PPOAgent(object):
+    def __init__(self):
+        self.player = None
+        self.env = None
+
+    def set_env(self, env):
+        self.env = env
+
+    def train(self):
+        #self.player = PPO("CnnPolicy", self.env, learning_rate=0.00007, gamma=0.95, gae_lambda=0.9, create_eval_env=True, tensorboard_log='logs',verbose=1)
+        self.player = PPO("CnnLstmPolicy", self.env, batch_size=32, n_steps=4096, learning_rate=0.0001, tensorboard_log='logs',verbose=1)
+        self.player.learn(total_timesteps=500000, callback=TrainAndLoggingCallback(check_freq=10000, save_path='models/'))
+
+    def get_state(self, state):
+        action, _ = self.player.predict(state)
+        return action
 
 class FilipkuvAgent(object):
     def __init__(self):
@@ -15,13 +51,12 @@ class FilipkuvAgent(object):
         self.stav = 0
 
 
-    def learn_how_to_play(self, env):
-        print env.action_space.n
-        #pass
+    def train(self, env):
+        pass
 
 
     def get_state(self, env):
-        print self.stav
+        print(self.stav)
         self.stav += 1
         if self.stav >= 330 and self.stav <= 335:
             return self.strileni_doleva
@@ -36,7 +71,7 @@ class RandomAgent(object):
     def __init__(self):
         pass
 
-    def learn_how_to_play(self, env):
+    def train(self, env):
         pass
 
     def get_state(self, env):
@@ -72,7 +107,7 @@ class MarkovDecisionModelAgent(object):
 
         self.initialized = True
 
-    def learn_how_to_play(self, env):
+    def train(self, env):
         if self.model_name is not None:
             return
         self.initialize(env)
@@ -141,7 +176,7 @@ class MarkovDecisionModelAgent(object):
     def get_state(self, env):
         action = np.argmax(self._Q[self.game_state, :])
         if self.game_state >= self.max_steps:
-            print "Trained for max_steps exceeded"
+            print("Trained for max_steps exceeded")
         else:
             self.game_state += 1
         return action

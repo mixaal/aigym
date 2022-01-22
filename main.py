@@ -1,5 +1,5 @@
-from gameplay import Gameplay
-from agents import RandomAgent, MarkovDecisionModelAgent, FilipkuvAgent
+from train import GamePlay
+from agents import RandomAgent, MarkovDecisionModelAgent, FilipkuvAgent, PPOAgent
 import atari_py as ap
 from gym import envs
 
@@ -11,18 +11,7 @@ from gym import envs
 #agent = RandomAgent()
 agent = FilipkuvAgent()
 
-game = Gameplay('Riverraid-v0', agent)
+game = GamePlay('Riverraid-v0', PPOAgent())
+game.train()
 game.play()
-print game.get_score()
-print game.get_lives()
-
-# playback = game.get_playback()
-#
-# for i in xrange(100):
-#     print "Playback len: %d" % len(playback._states)
-#     game.play(playback)
-#     print "Score: %d" % game.get_score()
-#     #print game.get_lives()
-#     playback = game.get_playback()
-
-
+print(game.get_score())

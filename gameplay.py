@@ -52,7 +52,7 @@ class Gameplay(object):
             action_n = playback.play()
             state, reward, done, info = self.env.step(action_n)
             if done:
-                print "Playback not finished"
+                print("Playback not finished")
                 return False
             self.score += reward
             self.env.render()
